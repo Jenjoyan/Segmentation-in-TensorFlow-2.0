@@ -1,5 +1,16 @@
-from tensorflow.keras.layers import Conv2D, BatchNormalization, Activation, MaxPool2D, Conv2DTranspose, Concatenate, Input
-from tensorflow.keras.models import Model
+import tensorflow as tf
+
+Conv2D = tf.keras.layers.Conv2D
+BatchNormalization = tf.keras.layers.BatchNormalization
+Activation = tf.keras.layers.Activation
+MaxPool2D = tf.keras.layers.MaxPool2D
+Conv2DTranspose = tf.keras.layers.Conv2DTranspose
+Concatenate = tf.keras.layers.Concatenate
+Input = tf.keras.layers.Input
+
+Model = tf.keras.models.Model
+layers = tf.keras.layers
+
 
 def conv_block(inputs, num_filters):
     x = Conv2D(num_filters, 3, padding="same")(inputs)
