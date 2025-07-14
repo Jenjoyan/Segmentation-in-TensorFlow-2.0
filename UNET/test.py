@@ -8,12 +8,14 @@ import pandas as pd
 from glob import glob
 from tqdm import tqdm
 import tensorflow as tf
-from tensorflow.keras.utils import CustomObjectScope
+# from tensorflow.keras.utils import CustomObjectScope
 from sklearn.metrics import f1_score, jaccard_score, precision_score, recall_score
 from sklearn.model_selection import train_test_split
 from metrics import dice_loss, dice_coef
 from train import load_dataset
 from unet import build_unet
+
+CustomObjectScope = tf.keras.utils.CustomObjectScope
 
 """ Global parameters """
 H = 256
@@ -48,10 +50,10 @@ if __name__ == "__main__":
 
     """ Load the model """
     with CustomObjectScope({"dice_coef": dice_coef, "dice_loss": dice_loss}):
-        model = tf.keras.models.load_model(os.path.join("files", "model.h5"))
+        model = tf.keras.models.load_model(os.path.join("files", "model.keras"))
 
     """ Dataset """
-    dataset_path = "/media/nikhil/Seagate Backup Plus Drive/ML_DATASET/brain_tumor_dataset/data"
+    dataset_path = "C:/Users/jenjo/Downloads/brain_tumor _dataset"
     (train_x, train_y), (valid_x, valid_y), (test_x, test_y) = load_dataset(dataset_path)
 
     """ Prediction and Evaluation """

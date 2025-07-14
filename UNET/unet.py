@@ -58,6 +58,6 @@ def build_unet(input_shape):
     return model
 
 if __name__ == "__main__":
-    input_shape = (256, 256, 3)
+    input_shape = (128, 128, 3)
     model = build_unet(input_shape)
     model.summary()

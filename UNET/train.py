@@ -1,6 +1,6 @@
-
 import os
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import numpy as np
 import cv2
@@ -85,9 +85,9 @@ if __name__ == "__main__":
     create_dir("files")
 
     """ Hyperparameters """
-    batch_size = 16
-    lr = 1e-4
-    num_epochs = 500
+    batch_size = 2
+    lr = 1e-5
+    num_epochs = 100
     model_path = os.path.join("files", "model.keras")
     csv_path = os.path.join("files", "log.csv")
 
