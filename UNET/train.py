@@ -1,23 +1,17 @@
+
 import os
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import numpy as np
 import cv2
 from glob import glob
 from sklearn.utils import shuffle
 import tensorflow as tf
-import tensorflow as tf
+from tensorflow.keras.callbacks import ModelCheckpoint, CSVLogger, ReduceLROnPlateau, EarlyStopping, TensorBoard
+from tensorflow.keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from unet import build_unet
 from metrics import dice_loss, dice_coef
-
-Callbacks  = tf.keras.callbacks
-Adam = tf.keras.optimizers.Adam
-ModelCheckpoint = tf.keras.callbacks.ModelCheckpoint
-ReduceLROnPlateau= tf.keras.callbacks.ReduceLROnPlateau
-CSVLogger = tf.keras.callbacks.CSVLogger
-EarlyStopping = tf.keras.callbacks.EarlyStopping
 
 """ Global parameters """
 H = 256
@@ -31,13 +25,13 @@ def load_dataset(path, split=0.2):
     images = sorted(glob(os.path.join(path, "images", "*.png")))
     masks = sorted(glob(os.path.join(path, "masks", "*.png")))
 
-    # split_size = int(len(images) * split)
+    split_size = int(len(images) * split)
 
-    train_x, valid_x = train_test_split(images, test_size=split, random_state=42)
-    train_y, valid_y = train_test_split(masks, test_size=split, random_state=42)
+    train_x, valid_x = train_test_split(images, test_size=split_size, random_state=42)
+    train_y, valid_y = train_test_split(masks, test_size=split_size, random_state=42)
 
-    train_x, test_x = train_test_split(train_x, test_size=split, random_state=42)
-    train_y, test_y = train_test_split(train_y, test_size=split, random_state=42)
+    train_x, test_x = train_test_split(train_x, test_size=split_size, random_state=42)
+    train_y, test_y = train_test_split(train_y, test_size=split_size, random_state=42)
 
     return (train_x, train_y), (valid_x, valid_y), (test_x, test_y)
 
@@ -85,14 +79,14 @@ if __name__ == "__main__":
     create_dir("files")
 
     """ Hyperparameters """
-    batch_size = 2
-    lr = 1e-5
-    num_epochs = 100
-    model_path = os.path.join("files", "model.keras")
+    batch_size = 16
+    lr = 1e-4
+    num_epochs = 500
+    model_path = os.path.join("files", "model.h5")
     csv_path = os.path.join("files", "log.csv")
 
     """ Dataset """
-    dataset_path = "C:/Users/jenjo/Downloads/brain_tumor _dataset"
+    dataset_path = "/media/nikhil/Seagate Backup Plus Drive/ML_DATASET/brain_tumor_dataset/data"
     (train_x, train_y), (valid_x, valid_y), (test_x, test_y) = load_dataset(dataset_path)
 
     print(f"Train: {len(train_x)} - {len(train_y)}")
